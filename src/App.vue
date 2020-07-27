@@ -37,7 +37,7 @@ export default {
 	-moz-osx-font-smoothing: grayscale;
 
 	/deep/.search-wrapper {
-		max-width: 400px;
+		max-width: 450px;
 	}
 }
 </style>

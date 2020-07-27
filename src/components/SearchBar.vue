@@ -2,6 +2,7 @@
 	<div :class="[customClass, 'search-wrapper']">
 		<div class="search-input">
 			<input
+				aria-label="Search for a user by first or last name"
 				class="form-control rounded-0 form-control-lg"
 				@focus="
 					SHOW_USER_PROFILE(false);
@@ -14,7 +15,12 @@
 				v-model="searchText"
 			/>
 		</div>
-		<div v-if="showAutoComplete" class="shadow-sm">
+		<AutoComplete>
+		<div
+			v-if="showAutoComplete"
+			class="shadow-sm"
+			v-clickoutside="clearSearchResults"
+		>
 			<ul class="list-group auto-complete rounded-0" ref="resultsList">
 				<li
 					class="list-group-item rounded-0"
@@ -23,6 +29,7 @@
 					v-for="(user, index) in filteredUsers"
 					@keydown="handleKeys"
 					@mouseover="activeResult = index"
+					@mouseout="activeResult = null"
 					:key="`user-${index}`"
 					tabindex="0"
 					@keydown.enter="handleUserSelection(user)"
@@ -41,7 +48,7 @@
 				</li>
 			</ul>
 		</div>
-		<Message />
+		<Message :message="message" />
 	</div>
 </template>
 
@@ -65,13 +72,14 @@ export default {
 		Message
 	},
 	computed: {
-		...mapState(['searchResults', 'filteredUsers']),
+		...mapState(['searchResults', 'filteredUsers', 'message']),
 		showAutoComplete() {
 			return this.filteredUsers.length;
 		}
 	},
 	methods: {
 		...mapMutations([
+			'RESET_MESSAGE',
 			'SET_MESSAGE',
 			'SET_SELECTED_USER',
 			'SHOW_USER_PROFILE',
@@ -81,6 +89,37 @@ export default {
 		handleKeys,
 		handleSearch: _.debounce(handleSearchInput, 600),
 		handleUserSelection
+	},
+	directives: {
+		clickoutside: {
+			bind: function(el, binding, vnode) {
+				el.clickOutsideEvent = function(event) {
+					// here I check that click was outside the el and his childrens
+					if (!(el === event.target || el.contains(event.target))) {
+						// and if it did, call method provided in attribute value
+						vnode.context[binding.expression](event);
+					}
+				};
+				document.body.addEventListener('click', el.clickOutsideEvent);
+				document.body.addEventListener(
+					'touchstart',
+					el.clickOutsideEvent
+				);
+			},
+			unbind: function(el) {
+				document.body.removeEventListener(
+					'click',
+					el.clickOutsideEvent
+				);
+				document.body.removeEventListener(
+					'touchstart',
+					el.clickOutsideEvent
+				);
+			},
+			stopProp(event) {
+				event.stopPropagation();
+			}
+		}
 	}
 };
 
@@ -93,6 +132,7 @@ function clearSearchResults() {
 	this.showErrorMessage = false;
 	this.$nextTick(() => this.$refs.searchInput.focus());
 }
+
 /**
  * Handles keyboard navigation
  * @param event - event data
@@ -186,6 +226,8 @@ function handleSearchInput(event) {
 			this.SET_MESSAGE({
 				content: 'No results were found'
 			});
+		} else {
+			this.RESET_MESSAGE();
 		}
 
 		this.SET_FILTERED_USERS(matches.slice(0, 10));
@@ -196,5 +238,11 @@ function handleSearchInput(event) {
 <style lang="scss">
 .auto-complete {
 	margin-top: -1px;
+
+	.list-group-item {
+		&.active {
+			cursor: pointer;
+		}
+	}
 }
 </style>

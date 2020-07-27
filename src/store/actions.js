@@ -8,8 +8,9 @@ const limit = 100;
 export const fetchUsers = ({ commit }) => {
 	return (
 		axios
-			// .get(`${API_BASE_URL}/?results=${limit}&seed=foobar&inc=name,phone`)
-			.get(`${API_BASE_URL}/?results=${limit}&seed=foobar`)
+			.get(
+				`${API_BASE_URL}/?results=${limit}&seed=foobar&inc=name,phone, picture`
+			)
 			.then(response => {
 				if (response.data && response.data.results) {
 					commit(

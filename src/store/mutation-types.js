@@ -8,3 +8,4 @@ export const SET_FILTERED_USERS = 'SET_FILTERED_USERS';
 
 // GLOBAL
 export const SET_MESSAGE = 'SET_MESSAGE';
+export const RESET_MESSAGE = 'RESET_MESSAGE';

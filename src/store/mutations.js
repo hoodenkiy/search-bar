@@ -41,5 +41,9 @@ export default {
 		}
 
 		state.message = payload;
+	},
+
+	[mutationTypes.RESET_MESSAGE](state) {
+		state.message = {};
 	}
 };

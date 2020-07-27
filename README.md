@@ -9,8 +9,10 @@ Simple search bar component.
 
 ##### To Do
 
--   EMake aout complete component reusable (abstract data, props).
+-   Add clear button to search bar.
+-   Make auto complete component reusable (abstract data, props).
 -   Error message and Autocomplete as separate components.
 -   Error handling for the data call.
--   More keyboard handling.
+-   More keyboard handling (blur).
+-   Track down slack styling & example.
 -   Write tests.

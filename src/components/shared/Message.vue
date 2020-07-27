@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
 	data() {
@@ -25,10 +25,6 @@ export default {
 				? this.message.type
 				: 'primary';
 		}
-	},
-	methods: {
-		...mapActions(['getTodos']),
-		...mapMutations(['SET_MESSAGE'])
 	},
 	watch: {
 		message(newMessage) {

@@ -8,7 +8,6 @@
 					searchText = '';
 				"
 				@input="handleSearch($event)"
-				@keyup.enter="handleSearch($event)"
 				@keydown="handleKeys"
 				placeholder="Search for a user by first or last name ..."
 				ref="searchInput"
@@ -42,24 +41,18 @@
 				</li>
 			</ul>
 		</div>
-		<div
-			v-if="showErrorMessage"
-			class="alert alert-primary mt-3 rounded-0"
-			role="alert"
-		>
-			No results were found
-		</div>
+		<Message />
 	</div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-
+import Message from '@/components/shared/Message';
+import _ from 'lodash';
 export default {
 	data() {
 		return {
 			searchText: '',
-			showErrorMessage: false,
 			activeResult: null
 		};
 	},
@@ -67,6 +60,9 @@ export default {
 		customClass: {
 			type: String
 		}
+	},
+	components: {
+		Message
 	},
 	computed: {
 		...mapState(['searchResults', 'filteredUsers']),
@@ -76,13 +72,14 @@ export default {
 	},
 	methods: {
 		...mapMutations([
+			'SET_MESSAGE',
 			'SET_SELECTED_USER',
 			'SHOW_USER_PROFILE',
 			'SET_FILTERED_USERS'
 		]),
 		clearSearchResults,
 		handleKeys,
-		handleSearch,
+		handleSearch: _.debounce(handleSearchInput, 600),
 		handleUserSelection
 	}
 };
@@ -165,11 +162,15 @@ function handleUserSelection(user) {
  * Handles search behavior, validates and sets search text
  * @param event - event data
  */
-function handleSearch(event) {
-	if (!event && event.target && event.target.value) {
+function handleSearchInput(event) {
+	if (
+		!event ||
+		!event.target ||
+		!event.target.value ||
+		event.target.value.length > 250
+	) {
 		return;
 	}
-
 	if (event.target.value.length >= 3) {
 		this.searchText = event.target.value.toLowerCase();
 		const matches = this.searchResults.filter(user => {
@@ -182,14 +183,12 @@ function handleSearch(event) {
 		});
 
 		if (!matches.length) {
-			this.showErrorMessage = true;
-		} else {
-			this.showErrorMessage = false;
+			this.SET_MESSAGE({
+				content: 'No results were found'
+			});
 		}
 
 		this.SET_FILTERED_USERS(matches.slice(0, 10));
-	} else {
-		this.showErrorMessage = false;
 	}
 }
 </script>

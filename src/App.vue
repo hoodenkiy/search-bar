@@ -1,6 +1,6 @@
 <template>
 	<div id="app" class="container my-5">
-		<SearchBar />
+		<SearchBar :custom-class="searchBarClass" />
 		<UserProfile v-if="showUserProfile" />
 	</div>
 </template>
@@ -11,12 +11,15 @@ import SearchBar from '@/components/SearchBar';
 import UserProfile from '@/components/UserProfile';
 
 export default {
+	data() {
+		return { searchBarClass: 'm-auto' };
+	},
 	components: {
 		SearchBar,
 		UserProfile
 	},
 	created() {
-		this.fetchUsers({});
+		this.fetchUsers();
 	},
 	computed: {
 		...mapState(['showUserProfile'])
@@ -32,5 +35,9 @@ export default {
 	font-family: Avenir, Helvetica, Arial, sans-serif;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+
+	/deep/.search-wrapper {
+		max-width: 400px;
+	}
 }
 </style>

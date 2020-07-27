@@ -13,5 +13,5 @@ export const searchUsers = state => searchTerm => {
 		return firstName.includes(term) || lastName.includes(term);
 	});
 
-	return matches.slice(0, 10);
+	return matches.slice(0, state.limitUsers);
 };

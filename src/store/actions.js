@@ -4,7 +4,7 @@ import * as mutationTypes from './mutation-types';
 const API_BASE_URL = 'https://randomuser.me/api';
 const limit = 100;
 
-export const fetchUsers = ({ state, commit }, searchTerm = '') => {
+export const fetchUsers = ({ commit }) => {
 	return axios
 		.get(`${API_BASE_URL}/?results=${limit}&seed=foobar?inc=name,phone`)
 		.then(response => {

@@ -1,5 +1,5 @@
 <template>
-	<div class="search-wrapper">
+	<div :class="[customClass, 'search-wrapper']">
 		<div class="search-input">
 			<input
 				class="form-control rounded-0 form-control-lg"
@@ -7,7 +7,6 @@
 					SHOW_USER_PROFILE(false);
 					searchText = '';
 				"
-				@keydown.tab="clearSearchResults"
 				@input="handleSearch($event)"
 				@keyup.enter="handleSearch($event)"
 				@keydown="handleKeys"
@@ -20,9 +19,11 @@
 			<ul class="list-group auto-complete rounded-0" ref="resultsList">
 				<li
 					class="list-group-item rounded-0"
+					:class="{ active: activeResult === index }"
 					@click="handleUserSelection(user)"
 					v-for="(user, index) in filteredUsers"
 					@keydown="handleKeys"
+					@mouseover="activeResult = index"
 					:key="`user-${index}`"
 					tabindex="0"
 					@keydown.enter="handleUserSelection(user)"
@@ -58,8 +59,14 @@ export default {
 	data() {
 		return {
 			searchText: '',
-			showErrorMessage: false
+			showErrorMessage: false,
+			activeResult: null
 		};
+	},
+	props: {
+		customClass: {
+			type: String
+		}
 	},
 	computed: {
 		...mapState(['searchResults', 'filteredUsers']),
@@ -98,14 +105,16 @@ function handleKeys(event) {
 		return;
 	}
 
-	const isValidKey = [40, 38, 27].includes(event.keyCode);
+	const keys = {
+		arrrowDown: 40,
+		arrrowUp: 38,
+		esc: 27,
+		tab: 9
+	};
+
+	const isValidKey = [40, 38, 27, 9].includes(event.keyCode);
 
 	if (this.$refs.resultsList && isValidKey) {
-		const keys = {
-			arrrowDown: 40,
-			arrrowUp: 38,
-			esc: 27
-		};
 		if (event.keyCode === keys.esc) {
 			this.clearSearchResults();
 		}
@@ -161,7 +170,7 @@ function handleSearch(event) {
 		return;
 	}
 
-	if (event.target.value.length > 1) {
+	if (event.target.value.length >= 3) {
 		this.searchText = event.target.value.toLowerCase();
 		const matches = this.searchResults.filter(user => {
 			const firstName = user.name.first.toLowerCase();
@@ -178,8 +187,9 @@ function handleSearch(event) {
 			this.showErrorMessage = false;
 		}
 
-		// this. = false;
 		this.SET_FILTERED_USERS(matches.slice(0, 10));
+	} else {
+		this.showErrorMessage = false;
 	}
 }
 </script>

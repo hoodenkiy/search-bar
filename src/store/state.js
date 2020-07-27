@@ -5,6 +5,7 @@ export default {
 	},
 	searchResults: [],
 	filteredUsers: [],
+	limitUsers: 10,
 	selectedUser: {},
 	showUserProfile: false
 };

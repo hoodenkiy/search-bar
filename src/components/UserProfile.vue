@@ -1,6 +1,6 @@
 <template>
 	<main>
-		<div class="card border-0 my-5">
+		<div class="card text-center border-0 my-4">
 			<div class="card-body">
 				<img
 					:alt="`${selectedUser.name.first} ${selectedUser.name.last}`"

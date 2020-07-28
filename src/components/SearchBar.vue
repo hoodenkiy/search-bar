@@ -11,6 +11,7 @@
 				@input="handleSearch($event)"
 				@keydown="handleKeys"
 				placeholder="Search for a user by first or last name ..."
+				id="search-input"
 				ref="searchInput"
 				v-model="searchText"
 			/>
@@ -72,7 +73,6 @@ export default {
  * Clears search results
  */
 function clearSearchResults() {
-	debugger;
 	this.searchText = '';
 	this.SET_FILTERED_USERS([]);
 	this.$nextTick(() => this.$refs.searchInput.focus());
@@ -95,14 +95,14 @@ function handleKeys(event) {
 	};
 
 	const isValidKey = [40, 38, 27, 9].includes(event.keyCode);
+	const resultsList = document.getElementById('results-list');
 
-	if (this.$refs.resultsList && isValidKey) {
+	if (resultsList && isValidKey) {
 		if (event.keyCode === keys.esc) {
-			debugger;
 			this.clearSearchResults();
 		}
 
-		const list = [...this.$refs.resultsList.children];
+		const list = [...resultsList.children];
 		const firstItem = list[0];
 		const lastItem = list[list.length - 1];
 		const listLength = list.length;
@@ -134,7 +134,6 @@ function handleKeys(event) {
  * @param user - selected user data
  */
 function handleUserSelection(user) {
-	debugger;
 	if (!user) {
 		return;
 	}
@@ -150,7 +149,6 @@ function handleUserSelection(user) {
  * @param event - event data
  */
 function handleSearchInput(event) {
-	debugger;
 	if (
 		!event ||
 		!event.target ||
@@ -179,6 +177,8 @@ function handleSearchInput(event) {
 		}
 
 		this.SET_FILTERED_USERS(matches.slice(0, 10));
+	} else {
+		this.SET_FILTERED_USERS([]);
 	}
 }
 </script>

@@ -1,6 +1,10 @@
 <template>
 	<div class="shadow-sm">
-		<ul class="list-group auto-complete rounded-0" ref="resultsList">
+		<ul
+			class="list-group auto-complete rounded-0"
+			ref="resultsList"
+			id="results-list"
+		>
 			<li
 				class="list-group-item rounded-0"
 				:class="{ active: activeResult === index }"
@@ -31,10 +35,28 @@
 
 <script>
 export default {
+	beforeDestroy() {
+		document.removeEventListener('click', this.onClickOutside);
+	},
+	mounted() {
+		document.addEventListener('click', this.onClickOutside);
+	},
 	data() {
 		return {
 			activeResult: null
 		};
+	},
+	methods: {
+		onClickOutside(event) {
+			const searchBox = document.getElementById('search-input');
+			if (
+				event.target !== searchBox &&
+				event.target !== this.$refs.resultsList &&
+				!this.$refs.resultsList.contains(event.target)
+			) {
+				this.$emit('click-out');
+			}
+		}
 	},
 	props: {
 		results: {

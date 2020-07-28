@@ -15,39 +15,12 @@
 				v-model="searchText"
 			/>
 		</div>
-		<AutoComplete>
-		<div
-			v-if="showAutoComplete"
-			class="shadow-sm"
-			v-clickoutside="clearSearchResults"
-		>
-			<ul class="list-group auto-complete rounded-0" ref="resultsList">
-				<li
-					class="list-group-item rounded-0"
-					:class="{ active: activeResult === index }"
-					@click="handleUserSelection(user)"
-					v-for="(user, index) in filteredUsers"
-					@keydown="handleKeys"
-					@mouseover="activeResult = index"
-					@mouseout="activeResult = null"
-					:key="`user-${index}`"
-					tabindex="0"
-					@keydown.enter="handleUserSelection(user)"
-				>
-					<img
-						:alt="`${user.name.first} ${user.name.last}`"
-						class="card-img w-auto shadow-sm rounded-circle"
-						:src="user.picture.thumbnail"
-						v-if="user.picture.thumbnail"
-					/>
-					<span class="mx-3 strong font-weight-bold">
-						{{ user.name.first }}
-						{{ user.name.last }}
-					</span>
-					&mdash; <span class="mx-2">{{ user.phone }}</span>
-				</li>
-			</ul>
-		</div>
+		<AutoComplete
+			:results="filteredUsers"
+			@result-selected="handleUserSelection($event)"
+			@click-outside="clearSearchResults"
+			@keyboard-navigation="handleKeys"
+		/>
 		<Message :message="message" />
 	</div>
 </template>
@@ -55,12 +28,13 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import Message from '@/components/shared/Message';
+import AutoComplete from '@/components/shared/AutoComplete';
+
 import _ from 'lodash';
 export default {
 	data() {
 		return {
-			searchText: '',
-			activeResult: null
+			searchText: ''
 		};
 	},
 	props: {
@@ -69,6 +43,7 @@ export default {
 		}
 	},
 	components: {
+		AutoComplete,
 		Message
 	},
 	computed: {
@@ -89,37 +64,6 @@ export default {
 		handleKeys,
 		handleSearch: _.debounce(handleSearchInput, 600),
 		handleUserSelection
-	},
-	directives: {
-		clickoutside: {
-			bind: function(el, binding, vnode) {
-				el.clickOutsideEvent = function(event) {
-					// here I check that click was outside the el and his childrens
-					if (!(el === event.target || el.contains(event.target))) {
-						// and if it did, call method provided in attribute value
-						vnode.context[binding.expression](event);
-					}
-				};
-				document.body.addEventListener('click', el.clickOutsideEvent);
-				document.body.addEventListener(
-					'touchstart',
-					el.clickOutsideEvent
-				);
-			},
-			unbind: function(el) {
-				document.body.removeEventListener(
-					'click',
-					el.clickOutsideEvent
-				);
-				document.body.removeEventListener(
-					'touchstart',
-					el.clickOutsideEvent
-				);
-			},
-			stopProp(event) {
-				event.stopPropagation();
-			}
-		}
 	}
 };
 
@@ -138,6 +82,7 @@ function clearSearchResults() {
  * @param event - event data
  */
 function handleKeys(event) {
+	debugger;
 	if (!event.keyCode) {
 		return;
 	}
@@ -188,6 +133,7 @@ function handleKeys(event) {
  * @param user - selected user data
  */
 function handleUserSelection(user) {
+	debugger;
 	if (!user) {
 		return;
 	}

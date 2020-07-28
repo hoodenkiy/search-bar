@@ -21,7 +21,7 @@
 					:alt="`${user.name.first} ${user.name.last}`"
 					class="card-img w-auto shadow-sm rounded-circle"
 					:src="user.picture.thumbnail"
-					v-if="user.picture.thumbnail"
+					v-if="user.picture && user.picture.thumbnail"
 				/>
 				<span class="mx-3 strong font-weight-bold">
 					{{ user.name.first }}

@@ -15,7 +15,7 @@
 				v-model="searchText"
 			/>
 		</div>
-		<AutoComplete
+		<AutoCompleteList
 			:results="filteredUsers"
 			@result-selected="handleUserSelection($event)"
 			@click-outside="clearSearchResults"
@@ -28,7 +28,7 @@
 <script>
 import { mapState, mapMutations } from 'vuex';
 import Message from '@/components/shared/Message';
-import AutoComplete from '@/components/shared/AutoComplete';
+import AutoCompleteList from '@/components/shared/AutoCompleteList';
 
 import _ from 'lodash';
 export default {
@@ -43,7 +43,7 @@ export default {
 		}
 	},
 	components: {
-		AutoComplete,
+		AutoCompleteList,
 		Message
 	},
 	computed: {

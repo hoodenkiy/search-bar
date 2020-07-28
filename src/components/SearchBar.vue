@@ -83,6 +83,7 @@ function clearSearchResults() {
  * @param event - event data
  */
 function handleKeys(event) {
+	console.log(event);
 	if (!event.keyCode) {
 		return;
 	}
@@ -93,6 +94,7 @@ function handleKeys(event) {
 		esc: 27,
 		tab: 9
 	};
+	// debugger;
 
 	const isValidKey = [40, 38, 27, 9].includes(event.keyCode);
 	const resultsList = document.getElementById('results-list');
@@ -101,7 +103,6 @@ function handleKeys(event) {
 		if (event.keyCode === keys.esc) {
 			this.clearSearchResults();
 		}
-
 		const list = [...resultsList.children];
 		const firstItem = list[0];
 		const lastItem = list[list.length - 1];

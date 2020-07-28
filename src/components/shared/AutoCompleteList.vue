@@ -10,7 +10,7 @@
 				:class="{ active: activeResult === index }"
 				@click="$emit('result-selected', user)"
 				v-for="(user, index) in results"
-				@keydown="$emit('keyboard-navigation')"
+				@keydown="$emit('keyboard-navigation', $event)"
 				@mouseover="activeResult = index"
 				@mouseout="activeResult = null"
 				:key="`user-${index}`"

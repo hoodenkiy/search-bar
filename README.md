@@ -9,10 +9,6 @@ Simple search bar component.
 
 ##### To Do
 
--   Add clear button to search bar.
--   Make auto complete component reusable (abstract data, props).
--   Error message and Autocomplete as separate components.
--   Error handling for the data call.
--   More keyboard handling (blur).
+-   Add clear button to search bar and searc icon.
 -   Track down slack styling & example.
 -   Write tests.

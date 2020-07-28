@@ -1,5 +1,5 @@
 <template>
-	<div :class="`mt-2 pt-1 text-${errorClass}`">
+	<div v-if="active" :class="`mt-2 pt-1 text-${errorClass}`">
 		{{ errorMesage }}
 	</div>
 </template>

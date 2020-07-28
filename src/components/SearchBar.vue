@@ -3,7 +3,7 @@
 		<div class="search-input">
 			<input
 				aria-label="Search for a user by first or last name"
-				class="form-control rounded-0 form-control-lg"
+				class="form-control form-control-lg"
 				@focus="
 					SHOW_USER_PROFILE(false);
 					searchText = '';
@@ -16,10 +16,11 @@
 			/>
 		</div>
 		<AutoCompleteList
+			@click-out="clearSearchResults"
+			@keyboard-navigation="handleKeys"
 			:results="filteredUsers"
 			@result-selected="handleUserSelection($event)"
-			@click-outside="clearSearchResults"
-			@keyboard-navigation="handleKeys"
+			v-if="showAutoComplete"
 		/>
 		<Message :message="message" />
 	</div>
@@ -49,7 +50,7 @@ export default {
 	computed: {
 		...mapState(['searchResults', 'filteredUsers', 'message']),
 		showAutoComplete() {
-			return this.filteredUsers.length;
+			return this.filteredUsers.length > 0;
 		}
 	},
 	methods: {
@@ -71,9 +72,9 @@ export default {
  * Clears search results
  */
 function clearSearchResults() {
+	debugger;
 	this.searchText = '';
 	this.SET_FILTERED_USERS([]);
-	this.showErrorMessage = false;
 	this.$nextTick(() => this.$refs.searchInput.focus());
 }
 
@@ -82,7 +83,6 @@ function clearSearchResults() {
  * @param event - event data
  */
 function handleKeys(event) {
-	debugger;
 	if (!event.keyCode) {
 		return;
 	}
@@ -98,6 +98,7 @@ function handleKeys(event) {
 
 	if (this.$refs.resultsList && isValidKey) {
 		if (event.keyCode === keys.esc) {
+			debugger;
 			this.clearSearchResults();
 		}
 
@@ -149,6 +150,7 @@ function handleUserSelection(user) {
  * @param event - event data
  */
 function handleSearchInput(event) {
+	debugger;
 	if (
 		!event ||
 		!event.target ||

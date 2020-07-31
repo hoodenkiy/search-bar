@@ -102,7 +102,7 @@ function handleKeys(event) {
 	const resultsList = document.getElementById('results-list');
 
 	if (resultsList && isValidKey) {
-		if (event.keyCode === keys.esc) {
+		if (event.keyCode === keys.esc || event.keyCode === keys.tab) {
 			this.clearSearchResults();
 		}
 		const list = [...resultsList.children];

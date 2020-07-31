@@ -27,12 +27,17 @@ export default {
 		state.filteredUsers = payload;
 	},
 
-	[mutationTypes.SET_SELECTED_USER](state, payload) {
-		if (!payload) {
+	[mutationTypes.SET_SELECTED_USER](state, { picture, name, phone }) {
+		if (!picture || !name || !phone) {
 			return;
 		}
 
-		state.selectedUser = payload;
+		state.selectedUser = {
+			picture: picture.large,
+			firstName: name.first,
+			lastName: name.last,
+			phone
+		};
 	},
 
 	[mutationTypes.SET_MESSAGE](state, payload) {

@@ -1,6 +1,6 @@
 <template>
-	<div id="app" class="container my-5">
-		<header class="text-center">
+	<div id="app" class="container mt-5 pt-5">
+		<header class="text-center ">
 			<h1 class="h3 mb-4">
 				&mdash;
 				<svg

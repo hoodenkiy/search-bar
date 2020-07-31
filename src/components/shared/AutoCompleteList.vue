@@ -10,7 +10,7 @@
 				class="list-group-item"
 				:class="{
 					active: activeResult === index,
-					'rounded-0': index === 0
+					'rounded-0': index === 0 && results.length > 1
 				}"
 				@click="$emit('result-selected', user)"
 				v-for="(user, index) in results"

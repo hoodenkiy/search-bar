@@ -85,7 +85,6 @@ function clearSearchResults() {
  * @param event - event data
  */
 function handleKeys(event) {
-	console.log(event);
 	if (!event.keyCode) {
 		return;
 	}
@@ -118,21 +117,23 @@ function handleKeys(event) {
 
 		if (focusedIndex === -1 || isLastItem) {
 			firstItem.focus();
+			firstItem.classList.add('active');
 		}
 
-		if (event.keyCode === keys.arrrowDown && listLength > 1) {
+		if (event.keyCode === keys.arrrowDown && listLength > 1 && list[focusedIndex + 1]) {
 			list[focusedIndex + 1].focus();
+			list[focusedIndex + 1].classList.add('active');
 		}
 
 		if (event.keyCode === keys.arrrowUp && listLength > 1 && isFirstItem) {
 			lastItem.focus();
+			lastItem.classList.add('active');
 		}
 
-		if (event.keyCode === keys.arrrowUp && listLength > 1) {
+		if (event.keyCode === keys.arrrowUp && listLength > 1 && list[focusedIndex - 1]) {
 			list[focusedIndex - 1].focus();
+			list[focusedIndex - 1].classList.add('active');
 		}
-
-		document.activeElement.classList.add('active');
 	}
 }
 

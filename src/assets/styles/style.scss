@@ -3,7 +3,7 @@
 @import '~bootstrap/scss/bootstrap';
 
 *:focus {
-	outline: 1px dashed orange;
+	outline: 1px dashed $blue;
 	outline-offset: 1px;
 }
 

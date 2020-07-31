@@ -5,19 +5,21 @@ import store from './';
 const API_BASE_URL = 'https://randomuser.me/api';
 const limit = 100;
 
-export const fetchUsers = ({ commit }) => {
-	return axios
-		.get(
-			`${API_BASE_URL}/?results=${limit}&seed=foobar&inc=name,phone, picture`
-		)
-		.then(response => {
-			if (response.data && response.data.results) {
-				commit(mutationTypes.SET_SEARCH_RESULTS, response.data.results);
-			}
-		})
-		.catch(error => {
-			handleErrors(error);
-		});
+export const fetchUsers = async({ commit }) => {
+	let response;
+
+	try {
+		response = await axios.get(
+			`${API_BASE_URL}/?results=${limit}&seed=foobar&inc=name,phone,picture`
+		);
+	} catch (error) {
+		handleErrors(error);
+		return;
+	}
+
+	if (response.data && response.data.results) {
+		commit(mutationTypes.SET_SEARCH_RESULTS, response.data.results);
+	}
 };
 
 /**

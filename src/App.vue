@@ -1,5 +1,8 @@
 <template>
 	<div id="app" class="container my-5">
+		<header class="text-center">
+			<h1 class="h3 mb-4">&mdash; Search Bar Component &mdash;</h1>
+		</header>
 		<SearchBar :custom-class="searchBarClass" />
 		<UserProfile v-if="showUserProfile" />
 	</div>

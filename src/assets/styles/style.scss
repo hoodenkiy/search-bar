@@ -1,3 +1,16 @@
 @import '~bootstrap/scss/functions';
 @import './custom.scss';
 @import '~bootstrap/scss/bootstrap';
+
+*:focus {
+	outline: 1px dashed orange;
+	outline-offset: 1px;
+}
+
+.search-input {
+	input {
+		&.rounded-top {
+			border-radius: 0.3rem 0.3rem 0rem 0rem;
+		}
+	}
+}

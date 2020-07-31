@@ -1,13 +1,16 @@
 <template>
 	<div class="shadow-sm">
 		<ul
-			class="list-group auto-complete rounded-0"
+			class="list-group auto-complete"
 			ref="resultsList"
 			id="results-list"
 		>
 			<li
-				class="list-group-item rounded-0"
-				:class="{ active: activeResult === index }"
+				class="list-group-item"
+				:class="{
+					active: activeResult === index,
+					'rounded-0': index === 0
+				}"
 				@click="$emit('result-selected', user)"
 				v-for="(user, index) in results"
 				@keydown="$emit('keyboard-navigation', $event)"

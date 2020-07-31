@@ -3,7 +3,9 @@
 		<div class="search-input">
 			<input
 				aria-label="Search for a user by first or last name"
+				autocomplete="off"
 				class="form-control form-control-lg"
+				:class="{ 'rounded-top': showAutoComplete }"
 				@focus="
 					SHOW_USER_PROFILE(false);
 					searchText = '';
@@ -112,6 +114,8 @@ function handleKeys(event) {
 		const isLastItem = focusedIndex === list.length - 1;
 		const isFirstItem = focusedIndex === 0;
 
+		document.activeElement.classList.remove('active');
+
 		if (focusedIndex === -1 || isLastItem) {
 			firstItem.focus();
 		}
@@ -127,6 +131,8 @@ function handleKeys(event) {
 		if (event.keyCode === keys.arrrowUp && listLength > 1) {
 			list[focusedIndex - 1].focus();
 		}
+
+		document.activeElement.classList.add('active');
 	}
 }
 

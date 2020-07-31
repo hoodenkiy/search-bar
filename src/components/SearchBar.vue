@@ -1,7 +1,10 @@
 <template>
 	<div :class="[customClass, 'search-bar']">
 		<div class="search-input w-100">
-			<label for="search-input" class="sr-only">Search for a user by first or last name</label>
+			<label for="search-input"
+				:class="{ 'sr-only': !showLabel }">{{
+				inputLabel
+			}}</label>
 			<input
 				aria-owns="results-list"
 				autocomplete="off"
@@ -13,8 +16,8 @@
 				"
 				@input="handleSearch($event)"
 				@keydown="handleKeys"
-				id="search-input"
-				placeholder="Search for a user by first or last name ..."
+				:id="inputId"
+				:placeholder="inputPlaceholder"
 				ref="searchInput"
 				v-model="searchText"
 			/>
@@ -22,7 +25,7 @@
 		<AutoCompleteList
 			@click-out="clearSearchResults"
 			@keyboard-navigation="handleKeys"
-			:results="filteredUsers"
+			:results="results"
 			@result-selected="handleUserSelection($event)"
 			v-if="showAutoComplete"
 		/>
@@ -45,6 +48,23 @@ export default {
 	props: {
 		customClass: {
 			type: String
+		},
+		inputLabel: {
+			type: String,
+			default: 'Search'
+		},
+		inputId: {
+			type: String,
+			default: 'search-input'
+		},
+		inputPlaceholder: {
+			type: String
+		},
+		results: {
+			type: Array
+		},
+		showLabel: {
+			type: Boolean
 		}
 	},
 	components: {
@@ -52,9 +72,9 @@ export default {
 		Message
 	},
 	computed: {
-		...mapState(['searchResults', 'filteredUsers', 'message']),
+		...mapState(['searchResults', 'message']),
 		showAutoComplete() {
-			return this.filteredUsers.length > 0;
+			return this.results.length > 0;
 		}
 	},
 	methods: {
@@ -175,6 +195,7 @@ function handleSearchInput(event) {
 		return;
 	}
 	if (event.target.value.length >= 3) {
+		this.$emit('search-input', event.target.value);
 		this.searchText = event.target.value.toLowerCase();
 		const matches = this.searchResults.filter(user => {
 			const firstName = user.name.first.toLowerCase();

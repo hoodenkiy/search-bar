@@ -1,6 +1,6 @@
 <template>
 	<main>
-		<div class="text-center border-0 my-4">
+		<div class="text-center border-0 my-5">
 			<img
 				:alt="`${selectedUser.firstName} ${selectedUser.lastName}`"
 				:title="`${selectedUser.firstName} ${selectedUser.lastName}`"

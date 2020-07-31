@@ -22,7 +22,13 @@
 				>Search Bar Component &mdash;
 			</h1>
 		</header>
-		<SearchBar :custom-class="searchBarClass" />
+		<SearchBar
+			:custom-class="searchBarClass"
+			input-label="Search for a user"
+			input-placeholder="Search for a user by first or last name ..."
+			:results="filteredUsers"
+			:show-label="false"
+		/>
 		<UserProfile v-if="showUserProfile" />
 	</div>
 </template>
@@ -44,7 +50,7 @@ export default {
 		this.fetchUsers();
 	},
 	computed: {
-		...mapState(['showUserProfile'])
+		...mapState(['showUserProfile', 'filteredUsers'])
 	},
 	methods: {
 		...mapActions(['fetchUsers'])

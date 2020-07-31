@@ -1,5 +1,5 @@
 <template>
-	<div :class="[customClass, 'search-wrapper']">
+	<div :class="[customClass, 'search-bar']">
 		<div class="search-input w-100">
 			<label for="search-input" class="sr-only">Search for a user by first or last name</label>
 			<input

@@ -2,15 +2,14 @@
 @import './custom.scss';
 @import '~bootstrap/scss/bootstrap';
 
-*:focus {
-	outline: 1px dashed $blue;
-	outline-offset: 1px;
-}
-
-.search-input {
+.search-bar {
 	input {
 		&.rounded-top {
 			border-radius: 0.3rem 0.3rem 0rem 0rem;
 		}
+	}
+	*:focus {
+		outline: 1px dashed $blue;
+		outline-offset: 4px;
 	}
 }

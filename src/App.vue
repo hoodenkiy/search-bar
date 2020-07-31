@@ -1,6 +1,6 @@
 <template>
 	<div id="app" class="container mt-5 pt-5">
-		<header class="text-center ">
+		<header class="text-center">
 			<h1 class="h3 mb-4">
 				&mdash;
 				<svg
@@ -18,8 +18,8 @@
 					<path
 						fill-rule="evenodd"
 						d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"
-					/>
-				</svg>Search Bar Component &mdash;
+					/></svg
+				>Search Bar Component &mdash;
 			</h1>
 		</header>
 		<SearchBar :custom-class="searchBarClass" />
@@ -58,7 +58,7 @@ export default {
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 
-	/deep/.search-wrapper {
+	/deep/.search-bar {
 		max-width: 450px;
 	}
 }

@@ -9,6 +9,5 @@ Simple search bar component.
 
 ##### To Do
 
--   Add clear button to search bar and searc icon.
--   Track down slack styling & example.
+-   Refactor to use router
 -   Write tests.

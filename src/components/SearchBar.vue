@@ -1,8 +1,9 @@
 <template>
 	<div :class="[customClass, 'search-wrapper']">
-		<div class="search-input">
+		<div class="search-input w-100">
+			<label for="search-input" class="sr-only">Search for a user by first or last name</label>
 			<input
-				aria-label="Search for a user by first or last name"
+				aria-owns="results-list"
 				autocomplete="off"
 				class="form-control form-control-lg"
 				:class="{ 'rounded-top': showAutoComplete }"
@@ -12,8 +13,8 @@
 				"
 				@input="handleSearch($event)"
 				@keydown="handleKeys"
-				placeholder="Search for a user by first or last name ..."
 				id="search-input"
+				placeholder="Search for a user by first or last name ..."
 				ref="searchInput"
 				v-model="searchText"
 			/>
@@ -120,7 +121,11 @@ function handleKeys(event) {
 			firstItem.classList.add('active');
 		}
 
-		if (event.keyCode === keys.arrrowDown && listLength > 1 && list[focusedIndex + 1]) {
+		if (
+			event.keyCode === keys.arrrowDown &&
+			listLength > 1 &&
+			list[focusedIndex + 1]
+		) {
 			list[focusedIndex + 1].focus();
 			list[focusedIndex + 1].classList.add('active');
 		}
@@ -130,7 +135,11 @@ function handleKeys(event) {
 			lastItem.classList.add('active');
 		}
 
-		if (event.keyCode === keys.arrrowUp && listLength > 1 && list[focusedIndex - 1]) {
+		if (
+			event.keyCode === keys.arrrowUp &&
+			listLength > 1 &&
+			list[focusedIndex - 1]
+		) {
 			list[focusedIndex - 1].focus();
 			list[focusedIndex - 1].classList.add('active');
 		}

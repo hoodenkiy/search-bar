@@ -1,6 +1,6 @@
 <template>
 	<main>
-		<div class="card text-center border-0 my-4">
+		<div class="text-center border-0 my-4">
 			<div class="card-body">
 				<img
 					:alt="`${selectedUser.name.first} ${selectedUser.name.last}`"
@@ -9,13 +9,10 @@
 					v-if="selectedUser.picture.large"
 				/>
 
-				<h5 class="card-title mb-4">
+				<h5 class="card-title mb-2">
 					{{ selectedUser.name.first }}
 					{{ selectedUser.name.last }}
 				</h5>
-				<h6 class="card-text">
-					Personal information:
-				</h6>
 				<p><strong>Phone#:</strong> {{ selectedUser.phone }}</p>
 			</div>
 		</div>

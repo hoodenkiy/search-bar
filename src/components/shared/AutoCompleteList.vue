@@ -1,7 +1,8 @@
 <template>
 	<div class="shadow-sm">
 		<ul
-			class="list-group auto-complete"
+			role="listbox"
+			class="list-group auto-complete w-100"
 			ref="resultsList"
 			id="results-list"
 		>
@@ -17,6 +18,7 @@
 				@mouseover="activeResult = index"
 				@mouseout="activeResult = null"
 				:key="`user-${index}`"
+				role="option"
 				tabindex="0"
 				@keydown.enter="$emit('result-selected', user)"
 			>

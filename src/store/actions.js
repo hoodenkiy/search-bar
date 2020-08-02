@@ -5,12 +5,12 @@ import store from './';
 const API_BASE_URL = 'https://randomuser.me/api';
 const limit = 100;
 
-export const fetchUsers = async({ commit }) => {
+export const fetchUsers = async({ commit }, userId) => {
 	let response;
 
 	try {
 		response = await axios.get(
-			`${API_BASE_URL}/?results=${limit}&seed=foobar&inc=name,phone,picture`
+			`${API_BASE_URL}/?results=${limit}&seed=foobar&inc=name,phone,picture,id`
 		);
 	} catch (error) {
 		handleErrors(error);
@@ -19,6 +19,9 @@ export const fetchUsers = async({ commit }) => {
 
 	if (response.data && response.data.results) {
 		commit(mutationTypes.SET_SEARCH_RESULTS, response.data.results);
+		if (userId) {
+			commit(mutationTypes.SET_SELECTED_USER, userId);
+		}
 	}
 };
 

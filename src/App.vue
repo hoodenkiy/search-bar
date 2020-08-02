@@ -25,7 +25,6 @@
 		<SearchBar
 			:custom-class="searchBarClass"
 			@clear-search-results="handleUserSelection"
-			@search-input-focused="handleSearchInputFocus"
 			input-label="Search for a user"
 			input-placeholder="Search for a user by first or last name ..."
 			:results="filteredUsers"
@@ -33,28 +32,26 @@
 			:show-label="false"
 			@search-input="handleSearchInput($event)"
 		/>
-		<UserProfile v-if="showUserProfile" />
+		<router-view />
 	</div>
 </template>
 
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex';
 import SearchBar from '@/components/SearchBar';
-import UserProfile from '@/components/UserProfile';
 
 export default {
 	data() {
 		return { searchBarClass: 'm-auto' };
 	},
 	components: {
-		SearchBar,
-		UserProfile
+		SearchBar
 	},
 	created() {
-		this.fetchUsers();
+		this.fetchUsers(this.$route.params.id);
 	},
 	computed: {
-		...mapState(['showUserProfile', 'filteredUsers', 'searchResults'])
+		...mapState(['filteredUsers', 'searchResults'])
 	},
 	methods: {
 		...mapActions(['fetchUsers']),
@@ -62,23 +59,21 @@ export default {
 			'RESET_MESSAGE',
 			'SET_FILTERED_USERS',
 			'SET_SELECTED_USER',
-			'SET_MESSAGE',
-			'SHOW_USER_PROFILE'
+			'SET_MESSAGE'
 		]),
 		handleUserSelection,
 		handleClearSearchResults,
-		handleSearchInputFocus,
 		handleSearchInput
-
+	},
+	watch: {
+		'$route.params.id'(id) {
+			debugger;
+			if (id) {
+				this.SET_SELECTED_USER(id);
+			}
+		}
 	}
 };
-
-/**
- * Handle search input focus
- */
-function handleSearchInputFocus() {
-	this.SHOW_USER_PROFILE(false);
-}
 
 /**
  * Clears search results
@@ -123,9 +118,10 @@ function handleUserSelection(user) {
 	if (!user) {
 		return;
 	}
+	debugger;
+	this.$router.push({ name: 'user', params: { id: user.id.value } });
+
 	this.SET_FILTERED_USERS([]);
-	this.SHOW_USER_PROFILE(true);
-	this.SET_SELECTED_USER(user);
 }
 </script>
 

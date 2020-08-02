@@ -74,7 +74,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations(['SHOW_USER_PROFILE', 'SET_FILTERED_USERS']),
+		...mapMutations(['SET_FILTERED_USERS']),
 		clearSearchResults,
 		handleKeys,
 		handleSearch: _.debounce(handleSearchInput, 600),

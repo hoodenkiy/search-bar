@@ -19,24 +19,21 @@ export default {
 		});
 	},
 
-	[mutationTypes.SHOW_USER_PROFILE](state, payload) {
-		state.showUserProfile = payload;
-	},
-
 	[mutationTypes.SET_FILTERED_USERS](state, payload = []) {
 		state.filteredUsers = payload;
 	},
 
-	[mutationTypes.SET_SELECTED_USER](state, { picture, name, phone }) {
-		if (!picture || !name || !phone) {
-			return;
-		}
-
+	[mutationTypes.SET_SELECTED_USER](state, id) {
+		debugger
+		const user = state.searchResults.find(user => {
+			return user.id.value === id;
+		});
 		state.selectedUser = {
-			picture: picture.large,
-			firstName: name.first,
-			lastName: name.last,
-			phone
+			id: user.id.value,
+			firstName: user.name.first,
+			lastName: user.name.last,
+			picture: user.picture.large,
+			phone: user.phone
 		};
 	},
 

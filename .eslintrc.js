@@ -13,7 +13,10 @@ module.exports = {
 		semi: 0,
 		indent: [2, 'tab'],
 		'no-tabs': 0,
-		'space-before-function-paren': ['error', 'never']
+		'space-before-function-paren': [
+			'error',
+			{ anonymous: 'never', named: 'never', asyncArrow: 'never' }
+		]
 	},
 	overrides: [
 		{

@@ -23,7 +23,7 @@ import { mapState } from 'vuex';
 
 export default {
 	computed: {
-		...mapState(['selectedUser'])
+		...mapState(['selectedUser', 'searchResults'])
 	}
 };
 </script>

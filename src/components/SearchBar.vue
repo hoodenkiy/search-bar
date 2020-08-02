@@ -1,8 +1,7 @@
 <template>
 	<div :class="[customClass, 'search-bar']">
 		<div class="search-input w-100">
-			<label for="search-input"
-				:class="{ 'sr-only': !showLabel }">{{
+			<label for="search-input" :class="{ 'sr-only': !showLabel }">{{
 				inputLabel
 			}}</label>
 			<input
@@ -18,7 +17,6 @@
 				@keydown="handleKeys"
 				:id="inputId"
 				:placeholder="inputPlaceholder"
-				ref="searchInput"
 				v-model="searchText"
 			/>
 		</div>
@@ -26,7 +24,7 @@
 			@click-out="clearSearchResults"
 			@keyboard-navigation="handleKeys"
 			:results="results"
-			@result-selected="handleUserSelection($event)"
+			@result-selected="handleResultSelection($event)"
 			v-if="showAutoComplete"
 		/>
 		<Message :message="message" />
@@ -81,14 +79,13 @@ export default {
 		...mapMutations([
 			'RESET_MESSAGE',
 			'SET_MESSAGE',
-			'SET_SELECTED_USER',
 			'SHOW_USER_PROFILE',
 			'SET_FILTERED_USERS'
 		]),
 		clearSearchResults,
 		handleKeys,
 		handleSearch: _.debounce(handleSearchInput, 600),
-		handleUserSelection
+		handleResultSelection
 	}
 };
 
@@ -97,8 +94,8 @@ export default {
  */
 function clearSearchResults() {
 	this.searchText = '';
-	this.SET_FILTERED_USERS([]);
-	this.$nextTick(() => this.$refs.searchInput.focus());
+	this.$emit('clear-search-results');
+	this.$nextTick(() => document.getElementById(this.inputId).focus());
 }
 
 /**
@@ -116,7 +113,6 @@ function handleKeys(event) {
 		esc: 27,
 		tab: 9
 	};
-	// debugger;
 
 	const isValidKey = [40, 38, 27, 9].includes(event.keyCode);
 	const resultsList = document.getElementById('results-list');
@@ -168,17 +164,14 @@ function handleKeys(event) {
 
 /**
  * Handles result/user selection
- * @param user - selected user data
+ * @param result - selected user data
  */
-function handleUserSelection(user) {
-	if (!user) {
+function handleResultSelection(result) {
+	if (!result) {
 		return;
 	}
-
-	this.SET_FILTERED_USERS([]);
+	this.$emit('result-selected', result);
 	this.searchText = '';
-	this.SHOW_USER_PROFILE(true);
-	this.SET_SELECTED_USER(user);
 }
 
 /**
@@ -194,30 +187,9 @@ function handleSearchInput(event) {
 	) {
 		return;
 	}
-	if (event.target.value.length >= 3) {
-		this.$emit('search-input', event.target.value);
-		this.searchText = event.target.value.toLowerCase();
-		const matches = this.searchResults.filter(user => {
-			const firstName = user.name.first.toLowerCase();
-			const lastName = user.name.first.toLowerCase();
-			return (
-				firstName.includes(this.searchText) ||
-				lastName.includes(this.searchText)
-			);
-		});
 
-		if (!matches.length) {
-			this.SET_MESSAGE({
-				content: 'No results were found'
-			});
-		} else {
-			this.RESET_MESSAGE();
-		}
-
-		this.SET_FILTERED_USERS(matches.slice(0, 10));
-	} else {
-		this.SET_FILTERED_USERS([]);
-	}
+	this.$emit('search-input', event.target.value);
+	this.searchText = event.target.value.toLowerCase();
 }
 </script>
 

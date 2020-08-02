@@ -12,27 +12,28 @@
 					active: activeResult === index,
 					'rounded-0': index === 0 && results.length > 1
 				}"
-				@click="$emit('result-selected', user)"
-				v-for="(user, index) in results"
+				@click="$emit('result-selected', result)"
+				v-for="(result, index) in results"
 				@keydown="$emit('keyboard-navigation', $event)"
 				@mouseover="activeResult = index"
 				@mouseout="activeResult = null"
-				:key="`user-${index}`"
+				:key="`result-${index}`"
 				role="option"
 				tabindex="0"
-				@keydown.enter="$emit('result-selected', user)"
+				@keydown.enter="$emit('result-selected', result)"
 			>
+				<slot></slot>
 				<img
-					:alt="`${user.name.first} ${user.name.last}`"
+					:alt="`${result.name.first} ${result.name.last}`"
 					class="card-img w-auto shadow-sm rounded-circle"
-					:src="user.picture.thumbnail"
-					v-if="user.picture && user.picture.thumbnail"
+					:src="result.picture.thumbnail"
+					v-if="result.picture && result.picture.thumbnail"
 				/>
 				<span class="mx-3 strong font-weight-bold">
-					{{ user.name.first }}
-					{{ user.name.last }}
+					{{ result.name.first }}
+					{{ result.name.last }}
 				</span>
-				&mdash; <span class="mx-2">{{ user.phone }}</span>
+				&mdash; <span class="mx-2">{{ result.phone }}</span>
 			</li>
 		</ul>
 	</div>

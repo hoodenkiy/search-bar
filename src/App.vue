@@ -24,17 +24,20 @@
 		</header>
 		<SearchBar
 			:custom-class="searchBarClass"
+			@clear-search-results="handleUserSelection"
 			input-label="Search for a user"
 			input-placeholder="Search for a user by first or last name ..."
 			:results="filteredUsers"
+			@result-selected="handleUserSelection($event)"
 			:show-label="false"
+			@search-input="handleSearchInput($event)"
 		/>
 		<UserProfile v-if="showUserProfile" />
 	</div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapMutations } from 'vuex';
 import SearchBar from '@/components/SearchBar';
 import UserProfile from '@/components/UserProfile';
 
@@ -50,12 +53,70 @@ export default {
 		this.fetchUsers();
 	},
 	computed: {
-		...mapState(['showUserProfile', 'filteredUsers'])
+		...mapState(['showUserProfile', 'filteredUsers', 'searchResults'])
 	},
 	methods: {
-		...mapActions(['fetchUsers'])
+		...mapActions(['fetchUsers']),
+		...mapMutations([
+			'RESET_MESSAGE',
+			'SET_FILTERED_USERS',
+			'SET_SELECTED_USER',
+			'SET_MESSAGE',
+			'SHOW_USER_PROFILE'
+		]),
+		handleUserSelection,
+		handleClearSearchResults,
+		handleSearchInput
 	}
 };
+
+/**
+ * Clears search results
+ * @param searchTerm - search term
+ */
+function handleSearchInput(searchTerm) {
+	if (searchTerm.length >= 3) {
+		const matches = this.searchResults.filter(user => {
+			const firstName = user.name.first.toLowerCase();
+			const lastName = user.name.first.toLowerCase();
+			return (
+				firstName.includes(searchTerm) || lastName.includes(searchTerm)
+			);
+		});
+
+		if (!matches.length) {
+			this.SET_MESSAGE({
+				content: 'No results were found'
+			});
+		} else {
+			this.RESET_MESSAGE();
+		}
+
+		this.SET_FILTERED_USERS(matches.slice(0, 10));
+	} else {
+		this.SET_FILTERED_USERS([]);
+	}
+}
+
+/**
+ * Clears search results
+ */
+function handleClearSearchResults() {
+	this.SET_FILTERED_USERS([]);
+}
+
+/**
+ * Handles result/user selection
+ * @param user - selected user data
+ */
+function handleUserSelection(user) {
+	if (!user) {
+		return;
+	}
+	this.SET_FILTERED_USERS([]);
+	this.SHOW_USER_PROFILE(true);
+	this.SET_SELECTED_USER(user);
+}
 </script>
 
 <style lang="scss" scoped>

@@ -4,7 +4,7 @@
 			role="listbox"
 			class="list-group auto-complete w-100"
 			ref="resultsList"
-			id="results-list"
+			:id="`${this.searchInputId}-results-list`"
 		>
 			<li
 				class="list-group-item"
@@ -54,7 +54,7 @@ export default {
 	},
 	methods: {
 		onClickOutside(event) {
-			const searchBox = document.getElementById('search-input');
+			const searchBox = document.getElementById(this.searchInputId);
 			if (
 				event.target !== searchBox &&
 				event.target !== this.$refs.resultsList &&
@@ -67,6 +67,9 @@ export default {
 	props: {
 		results: {
 			type: Array
+		},
+		searchInputId: {
+			type: String
 		}
 	}
 };

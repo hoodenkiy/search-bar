@@ -1,7 +1,7 @@
 <template>
 	<div :class="[customClass, 'search-bar']">
-		<div class="search-input w-100">
-			<label for="search-input" :class="{ 'sr-only': !showLabel }">{{
+		<div class="search-bar-input w-100">
+			<label :for="inputId" :class="{ 'sr-only': !showLabel }">{{
 				inputLabel
 			}}</label>
 			<input
@@ -9,10 +9,7 @@
 				autocomplete="off"
 				class="form-control form-control-lg"
 				:class="{ 'rounded-top': showAutoComplete }"
-				@focus="
-					SHOW_USER_PROFILE(false);
-					searchText = '';
-				"
+				@focus="handleInputFocus"
 				@input="handleSearch($event)"
 				@keydown="handleKeys"
 				:id="inputId"
@@ -24,6 +21,7 @@
 			@click-out="clearSearchResults"
 			@keyboard-navigation="handleKeys"
 			:results="results"
+			:search-input-id="inputId"
 			@result-selected="handleResultSelection($event)"
 			v-if="showAutoComplete"
 		/>
@@ -76,26 +74,25 @@ export default {
 		}
 	},
 	methods: {
-		...mapMutations([
-			'RESET_MESSAGE',
-			'SET_MESSAGE',
-			'SHOW_USER_PROFILE',
-			'SET_FILTERED_USERS'
-		]),
+		...mapMutations(['SHOW_USER_PROFILE', 'SET_FILTERED_USERS']),
 		clearSearchResults,
 		handleKeys,
 		handleSearch: _.debounce(handleSearchInput, 600),
-		handleResultSelection
+		handleResultSelection,
+		handleInputFocus,
+		handleItem
 	}
 };
 
 /**
- * Clears search results
+ * Clears search results, and sets focus back to the input
  */
 function clearSearchResults() {
 	this.searchText = '';
 	this.$emit('clear-search-results');
-	this.$nextTick(() => document.getElementById(this.inputId).focus());
+	this.$nextTick(() => {
+		document.getElementById(this.inputId).focus();
+	});
 }
 
 /**
@@ -115,7 +112,7 @@ function handleKeys(event) {
 	};
 
 	const isValidKey = [40, 38, 27, 9].includes(event.keyCode);
-	const resultsList = document.getElementById('results-list');
+	const resultsList = document.getElementById(`${this.inputId}-results-list`);
 
 	if (resultsList && isValidKey) {
 		if (event.keyCode === keys.esc || event.keyCode === keys.tab) {
@@ -130,36 +127,44 @@ function handleKeys(event) {
 		const isLastItem = focusedIndex === list.length - 1;
 		const isFirstItem = focusedIndex === 0;
 
+		const nextItem = list[focusedIndex + 1];
+		const prevItem = list[focusedIndex - 1];
+
 		document.activeElement.classList.remove('active');
 
 		if (focusedIndex === -1 || isLastItem) {
-			firstItem.focus();
-			firstItem.classList.add('active');
+			this.handleItem(firstItem);
 		}
 
-		if (
-			event.keyCode === keys.arrrowDown &&
-			listLength > 1 &&
-			list[focusedIndex + 1]
-		) {
-			list[focusedIndex + 1].focus();
-			list[focusedIndex + 1].classList.add('active');
+		if (event.keyCode === keys.arrrowDown && listLength > 1 && nextItem) {
+			this.handleItem(nextItem);
 		}
 
 		if (event.keyCode === keys.arrrowUp && listLength > 1 && isFirstItem) {
-			lastItem.focus();
-			lastItem.classList.add('active');
+			this.handleItem(lastItem);
 		}
 
-		if (
-			event.keyCode === keys.arrrowUp &&
-			listLength > 1 &&
-			list[focusedIndex - 1]
-		) {
-			list[focusedIndex - 1].focus();
-			list[focusedIndex - 1].classList.add('active');
+		if (event.keyCode === keys.arrrowUp && listLength > 1 && prevItem) {
+			this.handleItem(prevItem);
 		}
 	}
+}
+
+/**
+ * Focuses an item and adds focus
+ * @param item - selected user data
+ */
+function handleItem(item) {
+	item.focus();
+	item.classList.add('active');
+}
+
+/**
+ * Handles focus input
+ */
+function handleInputFocus() {
+	this.searchText = '';
+	this.$emit('search-input-focused');
 }
 
 /**
@@ -170,8 +175,8 @@ function handleResultSelection(result) {
 	if (!result) {
 		return;
 	}
-	this.$emit('result-selected', result);
 	this.searchText = '';
+	this.$emit('result-selected', result);
 }
 
 /**

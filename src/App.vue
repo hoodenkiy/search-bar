@@ -25,6 +25,7 @@
 		<SearchBar
 			:custom-class="searchBarClass"
 			@clear-search-results="handleUserSelection"
+			@search-input-focused="handleSearchInputFocus"
 			input-label="Search for a user"
 			input-placeholder="Search for a user by first or last name ..."
 			:results="filteredUsers"
@@ -66,9 +67,18 @@ export default {
 		]),
 		handleUserSelection,
 		handleClearSearchResults,
+		handleSearchInputFocus,
 		handleSearchInput
+
 	}
 };
+
+/**
+ * Handle search input focus
+ */
+function handleSearchInputFocus() {
+	this.SHOW_USER_PROFILE(false);
+}
 
 /**
  * Clears search results

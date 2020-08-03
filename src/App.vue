@@ -31,7 +31,11 @@
 			@result-selected="handleUserSelection($event)"
 			:show-label="false"
 			@search-input="handleSearchInput($event)"
-		/>
+		>
+			<template v-slot="slotProps">
+				<AutoCompleteItem :item="slotProps.item" />
+			</template>
+		</SearchBar>
 		<router-view />
 	</div>
 </template>
@@ -39,12 +43,14 @@
 <script>
 import { mapActions, mapState, mapMutations } from 'vuex';
 import SearchBar from '@/components/SearchBar';
+import AutoCompleteItem from '@/components/shared/AutoCompleteItem';
 
 export default {
 	data() {
 		return { searchBarClass: 'm-auto' };
 	},
 	components: {
+		AutoCompleteItem,
 		SearchBar
 	},
 	created() {
@@ -67,7 +73,6 @@ export default {
 	},
 	watch: {
 		'$route.params.id'(id) {
-			debugger;
 			if (id) {
 				this.SET_SELECTED_USER(id);
 			}
@@ -118,9 +123,7 @@ function handleUserSelection(user) {
 	if (!user) {
 		return;
 	}
-	debugger;
 	this.$router.push({ name: 'user', params: { id: user.id.value } });
-
 	this.SET_FILTERED_USERS([]);
 }
 </script>

@@ -22,18 +22,7 @@
 				tabindex="0"
 				@keydown.enter="$emit('result-selected', result)"
 			>
-				<slot></slot>
-				<img
-					:alt="`${result.name.first} ${result.name.last}`"
-					class="card-img w-auto shadow-sm rounded-circle"
-					:src="result.picture.thumbnail"
-					v-if="result.picture && result.picture.thumbnail"
-				/>
-				<span class="mx-3 strong font-weight-bold">
-					{{ result.name.first }}
-					{{ result.name.last }}
-				</span>
-				&mdash; <span class="mx-2">{{ result.phone }}</span>
+				<slot :item="result"></slot>
 			</li>
 		</ul>
 	</div>

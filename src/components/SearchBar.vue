@@ -24,7 +24,11 @@
 			:search-input-id="inputId"
 			@result-selected="handleResultSelection($event)"
 			v-if="showAutoComplete"
-		/>
+		>
+			<template v-slot="slotProps">
+				<slot :item="slotProps.item"></slot>
+			</template>
+		</AutoCompleteList>
 		<Message :message="message" />
 	</div>
 </template>

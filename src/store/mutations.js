@@ -24,7 +24,6 @@ export default {
 	},
 
 	[mutationTypes.SET_SELECTED_USER](state, id) {
-		debugger
 		const user = state.searchResults.find(user => {
 			return user.id.value === id;
 		});

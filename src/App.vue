@@ -24,7 +24,7 @@
 		</header>
 		<SearchBar
 			:custom-class="searchBarClass"
-			@clear-search-results="handleUserSelection"
+			@clear-search-results="handleClearSearchResults"
 			input-label="Search for a user"
 			input-placeholder="Search for a user by first or last name ..."
 			:results="filteredUsers"
@@ -113,6 +113,7 @@ function handleSearchInput(searchTerm) {
  */
 function handleClearSearchResults() {
 	this.SET_FILTERED_USERS([]);
+	this.$router.push('/');
 }
 
 /**

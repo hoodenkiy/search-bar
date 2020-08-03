@@ -7,11 +7,12 @@
 			:id="`${this.searchInputId}-results-list`"
 		>
 			<li
-				class="list-group-item"
 				:class="{
 					active: activeResult === index,
+					'rounded-bottom': results.length === 1,
 					'rounded-0': index === 0 && results.length > 1
 				}"
+				class="list-group-item"
 				@click="$emit('result-selected', result)"
 				v-for="(result, index) in results"
 				@keydown="$emit('keyboard-navigation', $event)"

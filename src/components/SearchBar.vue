@@ -92,11 +92,9 @@ export default {
  * Clears search results, and sets focus back to the input
  */
 function clearSearchResults() {
+	debugger
 	this.searchText = '';
 	this.$emit('clear-search-results');
-	this.$nextTick(() => {
-		document.getElementById(this.inputId).focus();
-	});
 }
 
 /**
